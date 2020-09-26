@@ -5,7 +5,7 @@ import "./Product.css";
 function Product({ id, title, image, price, rating }) {
   //global state, dispatch=>dispatch item to data layer
   const [{ basket }, dispatch] = useStateValue();
-  console.log("this is basket=>", basket);
+  // console.log("this is basket=>", basket);
 
   const addToBasket = () => {
     //dispatch the item in data layer
@@ -19,7 +19,7 @@ function Product({ id, title, image, price, rating }) {
         rating: rating,
       },
     });
-    console.log("added to basket");
+    // console.log("added to basket");
   };
   return (
     <div className="product">
