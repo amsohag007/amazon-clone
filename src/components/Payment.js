@@ -7,6 +7,7 @@ import { useElements, useStripe, CardElement } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from "../reducer";
 import axios from "../axios";
+import { db } from "../firebase";
 
 function Payment() {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -34,7 +35,9 @@ function Payment() {
 
     getClientSecret();
   }, [basket]);
-  console.log("the client secret is>>>>", clientSecret);
+
+  console.log("THE SECRET IS >>>", clientSecret);
+  console.log("👱", user);
 
   const handleSubmit = async (event) => {
     // do all the fancy stripe stuff...
@@ -48,19 +51,35 @@ function Payment() {
         },
       })
       .then(({ paymentIntent }) => {
-        //payment Intent = payment confirmation
+        // paymentIntent = payment confirmation
+
+        db.collection("users")
+          .doc(user?.uid)
+          .collection("orders")
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
+
         setSucceeded(true);
         setError(null);
         setProcessing(false);
-        history.replace("orders");
+
+        dispatch({
+          type: "EMPTY_BASKET",
+        });
+
+        history.replace("/orders");
       });
   };
 
-  const handleChange = (e) => {
-    //listen for changes in cardElement
-    //and display error as customer types their card details
-    setDisabled(e.empty);
-    setError(e.error ? e.error.message : "");
+  const handleChange = (event) => {
+    // Listen for changes in the CardElement
+    // and display any errors as the customer types their card details
+    setDisabled(event.empty);
+    setError(event.error ? event.error.message : "");
   };
 
   return (

@@ -42,12 +42,16 @@ function Header() {
             {/* sign in */}
           </div>
         </Link>
-        <div className="header__option">
+
+        <Link to="./orders">
           <div className="header__option">
-            <span className="header__optionLineOne">Returns</span>
-            <span className="header__optionLineOne">& Orders</span>
+            <div className="header__option">
+              <span className="header__optionLineOne">Returns</span>
+              <span className="header__optionLineOne">& Orders</span>
+            </div>
           </div>
-        </div>
+        </Link>
+
         <div className="header__option">
           <span className="header__optionLineOne">Your</span>
           <span className="header__optionLineOne">Prime</span>
